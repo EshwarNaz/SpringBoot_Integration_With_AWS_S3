@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
+import in.eshwarnaz.entity.S3Entity;
+import in.eshwarnaz.repo.S3ObjectRepo;
+
 @Service
 public class S3Util {
 
@@ -21,8 +24,18 @@ public class S3Util {
 	@Autowired
 	private final AmazonS3 s3;
 
+	@Autowired
+	private S3ObjectRepo s3Repo;
+
 	public S3Util(AmazonS3 s3) {
 		this.s3 = s3;
+	}
+
+	public String saveUrl(String url) {
+		S3Entity entity = new S3Entity();
+		entity.setS3ObjectUrl(url);
+		s3Repo.save(entity);
+		return "Object Saved";
 	}
 
 	public String saveFile(MultipartFile file) {
